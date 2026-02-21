@@ -112,7 +112,7 @@
       font-weight: 300;
       line-height: 1.7;
       opacity: 0.65;
-      margin-bottom: 8px;
+      margin-bottom: 60px;
     }
 
     .lang-divider {
@@ -130,7 +130,7 @@
       font-weight: 300;
       line-height: 1.7;
       opacity: 0.45;
-      margin-bottom: 48px;
+      margin-bottom: 56px;
       font-style: italic;
     }
 
@@ -153,6 +153,7 @@
       border-radius: 3px;
       overflow: hidden;
       background: transparent;
+      margin-bottom: 20px;
     }
 
     input[type="email"] {
@@ -230,6 +231,103 @@
       button[type="submit"] { padding: 14px; }
       .logo-wrap img { width: 160px; }
     }
+
+    .consent-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      max-width: 420px;
+      width: 100%;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .consent-wrap input[type="checkbox"] {
+      margin-top: 3px;
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
+      accent-color: var(--black);
+      cursor: pointer;
+    }
+
+    .consent-wrap label {
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 1.6;
+      opacity: 0.65;
+    }
+
+    .consent-wrap label a {
+      color: var(--black);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: #1a1a1a;
+      border: none;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+    }
+
+    .modal h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .modal p {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .modal p.muted {
+      color: rgba(255,255,255,0.35);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.4);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .modal-close:hover { color: #ffffff; }
   </style>
 </head>
 <body>
@@ -247,9 +345,12 @@
       <div class="form-wrap">
         <form id="waitlist-form" action="https://formspree.io/f/xaqdpnpo" method="POST">
           <input type="email" name="email" placeholder="your@email.com" required>
-          <button type="submit">Notify me</button>
+          <button type="submit" id="submit-btn" disabled>Notify me</button>
         </form>
-        <p class="form-note">No spam. Just the good stuff.</p>
+        <div class="consent-wrap">
+          <input type="checkbox" id="consent" onchange="toggleSubmit(this)">
+          <label for="consent">I consent to the processing of my email address for the purpose of notifying me about the product launch. Further information can be found in the <a onclick="openModal(event)">Privacy Policy</a>.</label>
+        </div>
         <p class="success-msg" id="success-msg">You're in. See you on the court. 🎾</p>
       </div>
     </div>
@@ -257,7 +358,35 @@
 
   <footer>© 2025 NoTennis</footer>
 
+
+  <!-- Privacy Policy Modal -->
+  <div class="modal-overlay" id="privacy-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3>Privacy Policy</h3>
+      <p>We collect and store your email address solely for the purpose of sending you a one-time notification about the product launch.</p>
+      <p>Your data will not be shared with third parties and will be deleted after the launch notification has been sent.</p>
+      <p class="muted">Responsible party: NoTennis GmbH<br>Contact: <a href="mailto:team@notennis.com" style="color:inherit;">team@notennis.com</a></p>
+    </div>
+  </div>
+
   <script>
+
+    function toggleSubmit(checkbox) {
+      document.getElementById('submit-btn').disabled = !checkbox.checked;
+    }
+    function openModal(e) {
+      e.preventDefault();
+      document.getElementById('privacy-modal').classList.add('active');
+    }
+    function closeModal() {
+      document.getElementById('privacy-modal').classList.remove('active');
+    }
+    // Close modal on overlay click
+    document.getElementById('privacy-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
     const form = document.getElementById('waitlist-form');
     const successMsg = document.getElementById('success-msg');
 
