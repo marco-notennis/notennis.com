@@ -391,8 +391,8 @@
           <button type="submit" id="submit-btn" disabled>Notify me</button>
         </form>
         <div class="consent-wrap">
-          <input type="checkbox" id="consent">
-          <label for="consent">I consent to the processing of my email address for the purpose of notifying me about the product launch. Further information can be found in the <a onclick="openModal(event)">Privacy Policy</a>.</label>
+          <input type="checkbox" id="consent" onclick="document.getElementById('submit-btn').disabled=!this.checked;">
+          <label for="consent">I consent to the processing of my email address for the purpose of notifying me about the product launch. Further information can be found in the <a href="#" onclick="document.getElementById('privacy-modal').classList.add('active');return false;">Privacy Policy</a>.</label>
         </div>
         <p class="success-msg" id="success-msg">You're in. See you on the court. 🎾</p>
       </div>
@@ -403,9 +403,9 @@
 
 
   <!-- Privacy Policy Modal -->
-  <div class="modal-overlay" id="privacy-modal">
+  <div class="modal-overlay" id="privacy-modal" onclick="if(event.target===this)this.classList.remove('active')">
     <div class="modal">
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" onclick="document.getElementById('privacy-modal').classList.remove('active')">✕</button>
       <h2>Privacy Policy</h2>
       <p>We collect and store your email address solely for the purpose of sending you a one-time notification about the product launch.</p>
       <p>Your data will not be shared with third parties and will be deleted after the launch notification has been sent.</p>
