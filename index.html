@@ -391,7 +391,7 @@
           <button type="submit" id="submit-btn" disabled>Notify me</button>
         </form>
         <div class="consent-wrap">
-          <input type="checkbox" id="consent" onchange="toggleSubmit(this)">
+          <input type="checkbox" id="consent">
           <label for="consent">I consent to the processing of my email address for the purpose of notifying me about the product launch. Further information can be found in the <a onclick="openModal(event)">Privacy Policy</a>.</label>
         </div>
         <p class="success-msg" id="success-msg">You're in. See you on the court. 🎾</p>
@@ -413,11 +413,16 @@
     </div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
 
-    function toggleSubmit(checkbox) {
-      document.getElementById('submit-btn').disabled = !checkbox.checked;
-    }
+    window.addEventListener('load', function() {
+      var btn = document.getElementById('submit-btn');
+      var checkbox = document.getElementById('consent');
+      btn.disabled = true;
+      checkbox.addEventListener('change', function() {
+        btn.disabled = !this.checked;
+      });
+    });
     function openModal(e) {
       e.preventDefault();
       document.getElementById('privacy-modal').classList.add('active');
